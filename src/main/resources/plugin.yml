@@ -1,0 +1,13 @@
+name: Hub
+version: ${project.version}
+main: xyz.zoradevelopment.Hub
+api-version: 1.17
+depend:
+  - Vault
+commands:
+  zHub:
+  Twitter:
+  Discord:
+  Store:
+  Website:
+  Teamspeak:

@@ -1,0 +1,12 @@
+take-damage-entity: false
+take-damage: false
+build-blocks: false
+break-blocks: false
+pickup-items: false
+drop-items: false
+join-message: true
+No-Weather: true
+No-Food: true
+Chat: true
+Mobs-Spawn: false
+Luchpads: true

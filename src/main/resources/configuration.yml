@@ -1,0 +1,76 @@
+Selector:
+  Enabled: true
+  Item: "BOOK"
+  Name: "&f(*) &6&lServer-Selector &f(*)"
+  Slot: 0
+  Lore:
+    - "&f&m-----------------------------"
+    - "&7&oSelect a server to go to..."
+    - "&f&m-----------------------------"
+Hub:
+  Enabled: true
+  Item: "NETHER_STAR"
+  Name: "&f(*) &b&lHub-Selector &f(*)"
+  Slot: 1
+  Lore:
+    - "&f&m-----------------------------------"
+    - "&7&oSelect a hub server to go to..."
+    - "&f&m-----------------------------------"
+EnderButt:
+  Enabled: true
+  Item: "ENDER_PEARL"
+  Name: "&f(*) &b&lEnderButt &f(*)"
+  Slot: 2
+  Lore:
+    - "&f&m-----------------------------------"
+    - "&7&oRight click to fly..."
+    - "&f&m-----------------------------------"
+
+Inventory:
+  Selector:
+    Title: "&aServer Inventory"
+    Slots: 9
+    Items:
+      1:
+        Item: "DIAMOND_SWORD"
+        Name: "&aHCF"
+        Lore:
+          - "&f&m-------------------------------"
+          - "&7&oright click to join hcf queue"
+          - "&f&m-------------------------------"
+        Slot:
+        Commands:
+          - "queueadd <player> hcf"
+  Hub:
+    Title: "&aHub Inventory"
+    Slots: 9
+    Items:
+      1:
+        Item: "ENDER_PEARL"
+        Name: "&aHub 01"
+        Lore:
+          - "&f&m-------------------------------"
+          - "&7&oright click to join hub queue"
+          - "&f&m-------------------------------"
+        Slot:
+        Commands:
+          - "queueadd <player> hub1"
+LunchPads:
+  Low:
+    Blocks: 5
+  High:
+    Blocks: 15
+
+Gadgets:
+  Heart:
+    Enabled: true
+    Name: "&4Hearts"
+    Slot: 3
+  Firework:
+    Enabled: true
+    Name: "&cFire&fwork"
+    Slot: 6
+  Enchant:
+    Enabled: true
+    Name: "&dEnchant"
+    Slot: 9

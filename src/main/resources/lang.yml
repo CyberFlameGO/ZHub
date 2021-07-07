@@ -1,0 +1,21 @@
+Join:
+  Message:
+    - "&f&m------------------------------"
+    - "&aWelcome to the server &7<player>"
+    - "&f&m------------------------------"
+
+Scoreboard:
+  Title: "&aZora &f[Hub]"
+  Lines:
+    - "&f&m------------------------------"
+    - "&aPlayer:"
+    - "<player>"
+    - ""
+    - "&aOnline Players:"
+    - "<online_players>"
+    - ""
+    - "&aRank:"
+    - "<rank>"
+    - "&f&m------------------------------"
+
+Chat-Format: "<rank> <player>&7: <message>"
