@@ -5,9 +5,11 @@ api-version: 1.17
 depend:
   - Vault
 commands:
-  zHub:
+  ZoraHub:
   Twitter:
   Discord:
   Store:
   Website:
   Teamspeak:
+  Gadgets:
+  List:

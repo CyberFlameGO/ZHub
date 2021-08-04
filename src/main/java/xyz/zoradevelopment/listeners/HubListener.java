@@ -1,30 +1,30 @@
 package xyz.zoradevelopment.listeners;
 
-import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
-import org.bukkit.Material;
-import org.bukkit.Sound;
-import org.bukkit.entity.Player;
+import org.bukkit.*;
+import org.bukkit.block.Block;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.EntitySpawnEvent;
-import org.bukkit.event.entity.FoodLevelChangeEvent;
+import org.bukkit.event.entity.*;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.event.weather.WeatherChangeEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.util.Vector;
+import org.spigotmc.event.entity.EntityDismountEvent;
 import xyz.zoradevelopment.Hub;
 import xyz.zoradevelopment.managers.HubManager;
 import xyz.zoradevelopment.utils.CC;
 
 import java.util.ArrayList;
+import java.util.PriorityQueue;
+import java.util.Queue;
 
 public class HubListener implements Listener {
 
@@ -51,9 +51,10 @@ public class HubListener implements Listener {
     @EventHandler
     public void onBuild(BlockPlaceEvent event) {
         final boolean enabled = Hub.settings.getConfiguration().getBoolean("build-blocks");
+        Player player = event.getPlayer();
         if (!enabled) {
             event.setCancelled(true);
-        } else if (event.getPlayer().getGameMode() == GameMode.CREATIVE) {
+        } else {
             event.setCancelled(false);
         }
     }
@@ -61,9 +62,10 @@ public class HubListener implements Listener {
     @EventHandler
     public void onBreak(BlockBreakEvent event) {
         final boolean enabled = Hub.settings.getConfiguration().getBoolean("break-blocks");
+        Player player = event.getPlayer();
         if (!enabled) {
             event.setCancelled(true);
-        } else if (event.getPlayer().getGameMode() == GameMode.CREATIVE) {
+        } else {
             event.setCancelled(false);
         }
     }
@@ -73,8 +75,6 @@ public class HubListener implements Listener {
         final boolean enabled = Hub.settings.getConfiguration().getBoolean("pickup-items");
         if (!enabled) {
             event.setCancelled(true);
-        } else if (event.getPlayer().getGameMode() == GameMode.CREATIVE) {
-            event.setCancelled(false);
         }
     }
 
@@ -92,10 +92,27 @@ public class HubListener implements Listener {
     public void onJoin(PlayerJoinEvent event) {
         event.setJoinMessage(null);
         Player player = event.getPlayer();
+        final boolean fireworkenabled = Hub.settings.getConfiguration().getBoolean("Fireworks");
+        if (fireworkenabled) {
+            Firework firework = player.getWorld().spawn(player.getLocation(), Firework.class);
+            FireworkMeta meta = firework.getFireworkMeta();
+            meta.addEffect(FireworkEffect.builder().withColor(Color.AQUA).withColor(Color.GREEN).withColor(Color.RED).withColor(Color.YELLOW).with(FireworkEffect.Type.BALL_LARGE).withFlicker().build());
+            meta.setPower(1);
+            firework.setFireworkMeta(meta);
+        }
+        final boolean spawnenabled = Hub.configuration.getConfiguration().getBoolean("Spawn.Enabled");
+        int x = Hub.configuration.getConfiguration().getInt("Spawn.x");
+        int y = Hub.configuration.getConfiguration().getInt("Spawn.y");
+        int z = Hub.configuration.getConfiguration().getInt("Spawn.z");
+        if (spawnenabled) {
+            player.teleport(new Location(Bukkit.getWorld("World"),x,y,z));
+        }
+        int online = Bukkit.getOnlinePlayers().size();
+        String players = String.valueOf(online);
         final boolean enabled = Hub.settings.getConfiguration().getBoolean("join-message");
         if (enabled) {
             for (final String joinmessage : Hub.lang.getConfiguration().getStringList("Join.Message")) {
-                player.sendMessage(CC.color(joinmessage).replace("<player>", player.getName()));
+                player.sendMessage(CC.color(joinmessage).replace("<player>", player.getName()).replace("<online_players>", players).replace("<rank>", Hub.chat.getPrimaryGroup(player)));
             }
         }
         player.setHealth(20);
@@ -112,15 +129,19 @@ public class HubListener implements Listener {
     }
 
     @EventHandler
-    public void onProjectileLaunch(PlayerInteractEvent e) {
-        if (e.getItem().getType() == Material.ENDER_PEARL && e.getAction() == Action.RIGHT_CLICK_AIR || e.getItem().getType() == Material.ENDER_PEARL && e.getAction() == Action.RIGHT_CLICK_BLOCK) {
-            e.getPlayer().setVelocity(e.getPlayer().getLocation().getDirection().multiply(2.5F));
-            e.getPlayer().playSound(e.getPlayer().getLocation(), Sound.ENDERMAN_TELEPORT, 1.0f, 1.0f);
-            e.getPlayer().updateInventory();
-            e.setCancelled(true);
-        } else {
-            e.setCancelled(true);
-            return;
+    public void on(PlayerInteractEvent e) {
+        Player player = e.getPlayer();
+        ItemStack itemInHand = player.getItemInHand();
+        if (e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK) {
+            if (player.getGameMode() == GameMode.CREATIVE) {
+                return;
+            }
+            if (itemInHand.getType() == Material.ENDER_PEARL) {
+                player.setVelocity(player.getLocation().getDirection().normalize().multiply(4));
+                player.playSound(player.getLocation(), Sound.ENDERMAN_TELEPORT, 1.0F, 10F);
+                player.updateInventory();
+                e.setCancelled(true);
+            }
         }
     }
 
@@ -166,7 +187,7 @@ public class HubListener implements Listener {
             if (player.getItemInHand() == null || player.getItemInHand().getItemMeta() == null || player.getItemInHand().getItemMeta().getDisplayName() == null) return;
             if (player.getItemInHand().getItemMeta().getDisplayName().equalsIgnoreCase(CC.color(Hub.configuration.getConfiguration().getString("Selector.Name")))) {
                 for (final String id : Hub.configuration.getConfiguration().getConfigurationSection("Inventory.Selector.Items").getKeys(false)) {
-                    int slot = Hub.configuration.getConfiguration().getInt("Inventory.Selector.Items." + id + "Slot");
+                    int slot = Hub.configuration.getConfiguration().getInt("Inventory.Selector.Items." + id + ".Slot");
                     ItemStack items = new ItemStack(Material.valueOf(Hub.configuration.getConfiguration().getString("Inventory.Selector.Items." + id + ".Item")));
                     ItemMeta itemsmeta = items.getItemMeta();
                     itemsmeta.setDisplayName(CC.color(Hub.configuration.getConfiguration().getString("Inventory.Selector.Items." + id + ".Name")));
@@ -194,7 +215,7 @@ public class HubListener implements Listener {
             if (player.getItemInHand() == null || player.getItemInHand().getItemMeta() == null || player.getItemInHand().getItemMeta().getDisplayName() == null) return;
             if (player.getItemInHand().getItemMeta().getDisplayName().equalsIgnoreCase(CC.color(Hub.configuration.getConfiguration().getString("Hub.Name")))) {
                 for (final String id : Hub.configuration.getConfiguration().getConfigurationSection("Inventory.Hub.Items").getKeys(false)) {
-                    int slot = Hub.configuration.getConfiguration().getInt("Inventory.Hub.Items." + id + "Slot");
+                    int slot = Hub.configuration.getConfiguration().getInt("Inventory.Hub.Items." + id + ".Slot");
                     ItemStack items = new ItemStack(Material.valueOf(Hub.configuration.getConfiguration().getString("Inventory.Hub.Items." + id + ".Item")));
                     ItemMeta itemsmeta = items.getItemMeta();
                     itemsmeta.setDisplayName(CC.color(Hub.configuration.getConfiguration().getString("Inventory.Hub.Items." + id + ".Name")));
@@ -224,9 +245,10 @@ public class HubListener implements Listener {
         }
 
         for (final String id : Hub.configuration.getConfiguration().getConfigurationSection("Inventory.Selector.Items").getKeys(false)) {
+            if (event.getCurrentItem() == null || event.getCurrentItem().getItemMeta() == null || event.getCurrentItem().getItemMeta().getDisplayName() == null) return;
             if (event.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase(CC.color(Hub.configuration.getConfiguration().getString("Inventory.Selector.Items." + id + ".Name")))) {
                 for (final String commands : Hub.configuration.getConfiguration().getStringList("Inventory.Selector.Items." + id + ".Commands")) {
-                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), commands.replace("<player>", player.getName()));
+                    player.performCommand(commands);
                 }
             }
         }
@@ -236,9 +258,10 @@ public class HubListener implements Listener {
         }
 
         for (final String id : Hub.configuration.getConfiguration().getConfigurationSection("Inventory.Hub.Items").getKeys(false)) {
+            if (event.getCurrentItem() == null || event.getCurrentItem().getItemMeta() == null || event.getCurrentItem().getItemMeta().getDisplayName() == null) return;
             if (event.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase(CC.color(Hub.configuration.getConfiguration().getString("Inventory.Hub.Items." + id + ".Name")))) {
                 for (final String commands : Hub.configuration.getConfiguration().getStringList("Inventory.Hub.Items." + id + ".Commands")) {
-                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), commands.replace("<player>", player.getName()));
+                    player.performCommand(commands);
                 }
             }
         }

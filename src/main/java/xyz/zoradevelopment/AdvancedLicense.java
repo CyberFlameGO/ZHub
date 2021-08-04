@@ -41,20 +41,20 @@ public class AdvancedLicense {
 	}
 
 	public boolean register() {
-		log(0, "[]==========[License-System]========================[]");
-		log(0, "Connecting to Zora Developement License Servers....");
+		log(0, "[]==========[License-System]==========[]");
+		log(0, "Connecting to Zora License-Server...");
 		ValidationType vt = isValid();
 		if (vt == ValidationType.VALID) {
 			log(1, "License valid!");
-			log(1, "Thanks for purchasing zHub");
-			log(0, "[]==========[License-System]==========================================[]");
+			log(1, "Thank you for purchasing a Zora Hub");
+			log(0, "[]==========[License-System]==========[]");
 			return true;
 		} else {
 			log(1, "License is NOT valid!");
 			log(1, "Failed as a result of " + vt.toString());
 			log(1, "Disabling plugin!");
-			log(1, "If you believe this is an bug please contact me on discord Kasper#4188");
-			log(0, "[]==========[License-System]==========================================[]");
+			log(1, "If you believe its a bug please dmm me on discord Kenty#4188");
+			log(0, "[]==========[License-System]==========[]");
 
 			Bukkit.getScheduler().cancelTasks(plugin);
 			Bukkit.getPluginManager().disablePlugin(plugin);

@@ -7,6 +7,7 @@ Selector:
     - "&f&m-----------------------------"
     - "&7&oSelect a server to go to..."
     - "&f&m-----------------------------"
+
 Hub:
   Enabled: true
   Item: "NETHER_STAR"
@@ -38,9 +39,9 @@ Inventory:
           - "&f&m-------------------------------"
           - "&7&oright click to join hcf queue"
           - "&f&m-------------------------------"
-        Slot:
+        Slot: 3
         Commands:
-          - "queueadd <player> hcf"
+          - "play hcf"
   Hub:
     Title: "&aHub Inventory"
     Slots: 9
@@ -52,25 +53,77 @@ Inventory:
           - "&f&m-------------------------------"
           - "&7&oright click to join hub queue"
           - "&f&m-------------------------------"
-        Slot:
+        Slot: 3
         Commands:
-          - "queueadd <player> hub1"
-LunchPads:
-  Low:
-    Blocks: 5
-  High:
-    Blocks: 15
+          - "play hub1"
 
-Gadgets:
-  Heart:
-    Enabled: true
-    Name: "&4Hearts"
-    Slot: 3
-  Firework:
-    Enabled: true
-    Name: "&cFire&fwork"
-    Slot: 6
-  Enchant:
-    Enabled: true
-    Name: "&dEnchant"
-    Slot: 9
+Spawn:
+  Enabled: true
+  x: 0
+  y: 100
+  z: 0
+
+TabList:
+  Left:
+    0: "<player>"
+    1: ""
+    2: ""
+    3: ""
+    4: ""
+    5: ""
+    6: ""
+    7: ""
+    8: ""
+    9: ""
+    10: ""
+    11: ""
+    12: ""
+    13: ""
+    14: ""
+    15: ""
+    16: ""
+    17: ""
+    18: ""
+    19: ""
+  Middle:
+    0: "<rank>"
+    1: ""
+    2: ""
+    3: ""
+    4: ""
+    5: ""
+    6: ""
+    7: ""
+    8: ""
+    9: ""
+    10: ""
+    11: ""
+    12: ""
+    13: ""
+    14: ""
+    15: ""
+    16: ""
+    17: ""
+    18: ""
+    19: ""
+  Right:
+    0: "<online_players>"
+    1: ""
+    2: ""
+    3: ""
+    4: ""
+    5: ""
+    6: ""
+    7: ""
+    8: ""
+    9: ""
+    10: ""
+    11: ""
+    12: ""
+    13: ""
+    14: ""
+    15: ""
+    16: ""
+    17: ""
+    18: ""
+    19: ""

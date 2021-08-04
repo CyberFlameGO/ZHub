@@ -6,16 +6,46 @@ Join:
 
 Scoreboard:
   Title: "&aZora &f[Hub]"
-  Lines:
+  Normal:
     - "&f&m------------------------------"
     - "&aPlayer:"
     - "<player>"
     - ""
     - "&aOnline Players:"
-    - "<online_players>"
+    - "<global>"
     - ""
     - "&aRank:"
     - "<rank>"
     - "&f&m------------------------------"
+  EzQueue:
+    - "&f&m------------------------------"
+    - "&aPlayer:"
+    - "<player>"
+    - ""
+    - "&aOnline Players:"
+    - "<global>"
+    - ""
+    - "&aRank:"
+    - "<rank>"
+    - ""
+    - "&aQueue:"
+    - "<position> / <size>"
+    - "&f&m------------------------------"
+  Portal:
+    - "&f&m------------------------------"
+    - "&aPlayer:"
+    - "<player>"
+    - ""
+    - "&aOnline Players:"
+    - "<global>"
+    - ""
+    - "&aRank:"
+    - "<rank>"
+    - ""
+    - "&aQueue:"
+    - "<position> / <size>"
+    - "&f&m------------------------------"
 
 Chat-Format: "<rank> <player>&7: <message>"
+
+List: "&fThere is currently &a<online_players>&f/ &a2000"

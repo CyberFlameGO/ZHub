@@ -10,3 +10,7 @@ No-Food: true
 Chat: true
 Mobs-Spawn: false
 Luchpads: true
+Doublejump: true
+Fireworks: true
+# We are currently supporting EzQueue || Portal ... However if your queue isn't on supported. Leave it blank... It will just not showcase the queue name // position on scoreboard
+Queue: "NONE"
